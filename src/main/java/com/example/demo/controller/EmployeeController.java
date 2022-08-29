@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.dtos.EmployeeDTO;
 import com.example.demo.dtos.EmployeeDepartmentPair;
-import com.example.demo.entity.Employee;
 import com.example.demo.services.serviceImpl.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//{
+//        "name": "test3",
+//        "gender":"male",
+//        "departmentId": 1
+//}
 @RestController
 @RequestMapping(value="/api/v1/employee")
 public class EmployeeController {
@@ -19,12 +23,12 @@ public class EmployeeController {
 
 
     @GetMapping("/")
-    public ResponseEntity<List<Employee>> getAllEmployee(){
+    public ResponseEntity<List<EmployeeDTO>> getAllEmployee(){
         return new ResponseEntity<>(employeeService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") Long id)
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable("id") Long id)
     {
         return new ResponseEntity<>(employeeService.getById(id),HttpStatus.OK);
     }
@@ -36,6 +40,7 @@ public class EmployeeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable("id") Long id, @RequestBody EmployeeDTO employeeDTO){
+        employeeDTO.setId(id);
         return new ResponseEntity<>(employeeService.update(employeeDTO),HttpStatus.OK);
     }
 

@@ -2,7 +2,6 @@ package com.example.demo.dtos;
 
 import lombok.*;
 
-import java.util.Date;
 
 @Data
 @Getter
@@ -12,6 +11,6 @@ import java.util.Date;
 public class DepartmentDTO {
     private Long id;
     private String fullname;
-    private Date description;
+    private String description;
     private Long countEmployee;
 }

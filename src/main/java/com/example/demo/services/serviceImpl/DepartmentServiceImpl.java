@@ -36,7 +36,7 @@ public class DepartmentServiceImpl implements IDepartmentService {
         {
             department.setEmployees(department.getEmployees());
             return department;
-        };
+        }
         return null;
     }
 
@@ -63,8 +63,6 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
     @Override
     public DepartmentDTO getDepartmentWithCountEmployee(Long id){
-        DepartmentDTO departmentDTO=modelMapper.map(departmentRepository.findById(id), DepartmentDTO.class);
-        departmentDTO.setCountEmployee((long)myBatisDepartmentRepository.countEmployee(id));
-        return departmentDTO;
+        return myBatisDepartmentRepository.findDepartmentById(id);
     }
 }

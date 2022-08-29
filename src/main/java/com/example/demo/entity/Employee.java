@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,9 +26,12 @@ public class Employee {
     private Date birthDate;
 
     @Column(name="gender")
-    private String gender;
+        private String gender;
 
-    @ManyToOne
-    @JoinColumn(name = "departmentId", referencedColumnName = "departmentId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "departmentId", referencedColumnName = "departmentId",nullable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private Department department;
 }

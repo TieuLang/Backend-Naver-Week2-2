@@ -3,10 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.dtos.DepartmentDTO;
 import com.example.demo.entity.Department;
 import com.example.demo.services.serviceImpl.DepartmentServiceImpl;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +16,9 @@ import java.util.List;
 public class DepartmentController {
     @Autowired
     DepartmentServiceImpl departmentService;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @GetMapping("/")
     public ResponseEntity<List<Department>> getDepartment(){
@@ -38,6 +37,7 @@ public class DepartmentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Department> updateDepartment(@PathVariable("id")  Long id, @RequestBody Department department){
+        department.setId(id);
         return new ResponseEntity<>(departmentService.update(department),HttpStatus.OK);
     }
 

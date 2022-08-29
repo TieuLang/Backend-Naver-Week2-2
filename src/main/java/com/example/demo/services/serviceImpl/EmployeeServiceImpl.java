@@ -4,8 +4,8 @@ import com.example.demo.dtos.EmployeeDTO;
 import com.example.demo.dtos.EmployeeDepartmentPair;
 import com.example.demo.entity.Department;
 import com.example.demo.entity.Employee;
+import com.example.demo.repositories.DepartmentRepository;
 import com.example.demo.repositories.EmployeeRepository;
-import com.example.demo.repositories.MyBatisDepartmentRepository;
 import com.example.demo.repositories.MyBatisEmployeeRepository;
 import com.example.demo.services.IEmployeeService;
 import org.modelmapper.ModelMapper;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,17 +27,23 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Resource
     MyBatisEmployeeRepository myBatisEmployeeRepository;
 
-    @Resource
-    MyBatisDepartmentRepository myBatisDepartmentRepository;
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     @Override
-    public List<Employee> getAll(){
-        return employeeRepository.findAll();
+    public List<EmployeeDTO> getAll(){
+        List<EmployeeDTO> employeeDTOS=new ArrayList<>();
+        for (Employee employe:employeeRepository.findAll()){
+            employeeDTOS.add(modelMapper.map(employe,EmployeeDTO.class));
+        }
+        return employeeDTOS;
     }
 
     @Override
-    public Employee getById(Long id){
-        return employeeRepository.findById(id).orElse(null);
+    public EmployeeDTO getById(Long id){
+        var employee=employeeRepository.findById(id).orElse(null);
+        if (employee==null) return null;
+        return modelMapper.map(employee,EmployeeDTO.class);
     }
 
     @Override
@@ -64,8 +71,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public EmployeeDepartmentPair getEmployeeAndItsDepartmentByEmployeeId(Long id){
         EmployeeDTO employeeDTO=modelMapper.map(myBatisEmployeeRepository.findEmployeeById(id),EmployeeDTO.class);
-        Department department=myBatisDepartmentRepository.findDepartmentById(employeeDTO.getDepartmentId());
-        EmployeeDepartmentPair employeeDTODepartmentPair = new EmployeeDepartmentPair(employeeDTO,department);
-        return employeeDTODepartmentPair;
+        Department department= departmentRepository.findById(employeeDTO.getDepartmentId()).orElse(null);
+        return new EmployeeDepartmentPair(employeeDTO,department);
     }
 }

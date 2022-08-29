@@ -1,10 +1,8 @@
 package com.example.demo.entity;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,6 +24,9 @@ public class Department {
     @Column(name="description")
     private String description;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Employee> employees;
 }
